@@ -7,6 +7,7 @@ const login = lazy(() => import('../pages/app/login'));
 const register = lazy(() => import('../pages/app/register'));
 const dashboard = lazy(() => import('../pages/app/dashboard'));
 const store = lazy(() => import('../pages/app/store'));
+const registerSeller = lazy(() => import('../pages/app/registerSeller'));
 
 
 const Router = () => {
@@ -21,6 +22,7 @@ const Router = () => {
                     <Route exact path="/register" component={register} />
                     <Route exact path="/dashboard" component={dashboard} />
                     <Route exact path="/store" component={store} />
+                    <Route exact path="/registerSeller" component={registerSeller} />
 
                 </Switch>
             </Suspense>

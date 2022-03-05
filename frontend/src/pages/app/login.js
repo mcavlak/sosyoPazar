@@ -1,12 +1,37 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Box, Container, Grid, TextField, Typography } from '@mui/material'
+import { Box, Container, Grid, Typography } from '@mui/material'
 import { Link } from 'react-router-dom'
-
+import { useHistory } from 'react-router-dom'
+import { loginRequest } from '../../api/controllers/account-controller'
+import { useSnackbar } from 'notistack'
 
 const Page = () => {
+    const history = useHistory();
+    const { enqueueSnackbar } = useSnackbar();
 
-    const test = ["test", "text"]
+    const [form, setForm] = useState({
+        password: "",
+        username: ""
+    })
+
+    const onChangeInput = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            let res = await loginRequest(form);
+            if (res) {
+                history.push('/dashboard');
+                enqueueSnackbar('Başarıyla giriş yaptın!', { variant: 'success' });
+            }
+        } catch (error) {
+            console.log(error)
+            enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+        }
+    }
 
     return (
         <Container>
@@ -14,17 +39,15 @@ const Page = () => {
             <section className='defaultSection'>
                 <Grid container padding={0}>
                     <Grid item xs={12} md={6}>
-                        <img src='/assets/loginImg.svg' width='100%' />
+                        <img src='/assets/loginImg.svg' width='100%' alt='' />
                     </Grid>
                     <Grid item xs={12} md={6} display='flex' justifyContent='center' alignItems='center'>
-                        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 3rem", textAlign: "left" }}>
+                        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 3rem", textAlign: "left" }}>
                             <h1 style={{ marginBottom: "2rem" }}>Pazar seni özlemişti hoşgeldin :)</h1>
-                            <input type='text' className='customInput' placeholder="Kullanıcı Adın" />
-                            <input type='password' className='customInput' placeholder="Şifren" />
-                            <Link style={{ width: "100%" }} to={'/dashboard'}>
-                                <button style={{ width: "100%" }} className='loginRegisterBtn'>Giriş Yap</button>
-                            </Link>
-                        </Box>
+                            <input required onChange={(e) => onChangeInput(e)} name='username' type='text' className='customInput' placeholder="Kullanıcı Adın" />
+                            <input required onChange={(e) => onChangeInput(e)} name='password' type='password' className='customInput' placeholder="Şifren" />
+                            <button type="submit" style={{ width: "100%" }} className='loginRegisterBtn'>Giriş Yap</button>
+                        </form>
                     </Grid>
                 </Grid>
 

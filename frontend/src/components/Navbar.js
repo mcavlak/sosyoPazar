@@ -1,23 +1,33 @@
 import { CloseRounded } from '@mui/icons-material'
 import { Autocomplete, Box, IconButton, Modal, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getProvincesRequest } from '../api/controllers/province-controller'
 
 const Navbar = () => {
+    const [chooseProvinceModal, setChooseProvinceModal] = useState(false)
+    const [selectedProvince, setSelectedProvince] = useState(null)
+    const [provinces, setProvinces] = useState([])
 
-    const [chooseCityModal, setChooseCityModal] = useState(false)
-    const [city, setCity] = useState()
+    const fetchProvinces = async () => {
+        try {
+            let res = await getProvincesRequest();
 
-    const citys = [
-        {
-            label: 'DENİZLİ',
-            value: 'denizli',
-        },
-        {
-            label: 'İZMİR',
-            value: 'izmir'
+            if (res) {
+                setProvinces(res.data)
+            }
+
+        } catch (error) {
+            console.log(error)
         }
-    ]
+    }
+
+    useEffect(() => {
+
+        fetchProvinces()
+
+    }, [])
+
 
     return (
         <nav className="navbar">
@@ -25,8 +35,8 @@ const Navbar = () => {
                 <div className="logo">
                     <Link to={'/'}>SosyoPazar</Link >
                     <span style={{ margin: "0 .5rem" }}>|</span>
-                    <button style={{ backgroundColor: 'rgba(169, 146, 125, 0.25)' }} onClick={() => setChooseCityModal(true)} >
-                        {city === undefined ? 'Şehir Seçin' : city}
+                    <button style={{ backgroundColor: 'rgba(169, 146, 125, 0.25)' }} onClick={() => setChooseProvinceModal(true)} >
+                        {selectedProvince ? selectedProvince : 'Şehir Seçin'}
                     </button>
                 </div>
                 <div className="nav-buttons">
@@ -40,8 +50,8 @@ const Navbar = () => {
             </div>
 
             <Modal
-                open={chooseCityModal}
-                onClose={() => setChooseCityModal(false)}
+                open={chooseProvinceModal}
+                onClose={() => setChooseProvinceModal(false)}
             >
                 <Box sx={{
                     position: 'absolute',
@@ -55,20 +65,21 @@ const Navbar = () => {
                     borderRadius: 3,
                 }}>
                     <Box sx={{ position: 'absolute', right: 15, top: 15 }}>
-                        <IconButton onClick={() => setChooseCityModal(false)} fontSize='small'>
+                        <IconButton onClick={() => setChooseProvinceModal(false)} fontSize='small'>
                             <CloseRounded />
                         </IconButton>
                     </Box>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Öncelikle şehir seçelim
+                    <Typography variant="overline">
+                        ÖNCELİKLE ŞEHİR SEÇELİM
                     </Typography>
                     <Autocomplete
-                        disablePortal
-                        options={citys}
-                        fullWidth
-                        value={city}
-                        onChange={(e) => setCity(e.target.outerText) & setChooseCityModal(false)}
-                        sx={{ marginTop: '1.5rem' }}
+                        sx={{ mt: 2 }}
+                        options={provinces}
+                        value={selectedProvince}
+                        onChange={(event, newValue) => {
+                            setSelectedProvince(newValue);
+                        }}
+                        getOptionLabel={(option) => option?.provinceName}
                         renderInput={(params) => <TextField {...params} label="Şehir seçiniz" />}
                     />
                 </Box>

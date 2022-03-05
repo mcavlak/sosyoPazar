@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
-import { Badge, Box, Card, Container, Divider, Tab, Tabs, Grid, Input, Button } from '@mui/material'
+import { Badge, Box, Container, Divider, Tab, Tabs, Grid } from '@mui/material'
 import CustomDiscoverCard from '../../components/CustomDiscoverCard';
 import ImageUploading from 'react-images-uploading';
 
@@ -120,6 +120,7 @@ const Page = () => {
                                                 </div>
                                             ))}
                                         </div>
+
                                     )}
                                 </ImageUploading>
                                 <CustomDiscoverCard />
