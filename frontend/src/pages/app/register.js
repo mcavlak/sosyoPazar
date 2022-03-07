@@ -29,8 +29,11 @@ const Page = () => {
                 enqueueSnackbar('Kaydın başarıyla yapıldı!', { variant: 'success' });
             }
         } catch (error) {
-            console.log(error)
-            enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            if (error?.response?.status === 400) {
+                enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+            } else {
+                enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            }
         }
     }
 

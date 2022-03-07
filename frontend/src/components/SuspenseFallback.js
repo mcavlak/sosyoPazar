@@ -1,3 +1,4 @@
+import { CircularProgress } from '@mui/material'
 import React from 'react'
 
 const SuspenseFallback = () => {
@@ -9,10 +10,7 @@ const SuspenseFallback = () => {
             alignItems: "center",
             justifyContent: "center",
         }}>
-            <p>
-                Yükleniyor
-            </p>
-
+            <CircularProgress />
         </div>
     )
 }

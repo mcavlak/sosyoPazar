@@ -1,9 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar'
 import { Box, Grid, Container, IconButton, Divider } from '@mui/material'
 import CustomCard from '../../components/CustomCard'
 import { SearchRounded } from '@mui/icons-material'
+import Footer from '../../components/Footer'
+import { getSellersRequest } from '../../api/controllers/seller-controller'
 const Page = () => {
+
+    const [sellers, setSellers] = useState([])
+
+    const fetchSellers = async () => {
+        try {
+            let res = await getSellersRequest();
+
+            if (res) {
+                setSellers(res.data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+
+        fetchSellers()
+
+    }, [])
 
 
     return (
@@ -29,13 +51,15 @@ const Page = () => {
                     <p className='subTitle'>Belki lazım olur :)</p>
                     <Divider sx={{ my: "1rem" }} />
                     <Grid container spacing={2}>
-                        <CustomCard rating={2} shopName="Test 1" followers="24" adress="Denizli" work="Butik" />
-                        <CustomCard rating={5} shopName="Test 2" followers="12" adress="Manisa" work="Züccaciye" />
-                        <CustomCard rating={3} shopName="Test 3" followers="8" adress="İstanbul" work="Kafe" />
-                        <CustomCard rating={3.5} shopName="Test 4" followers="32" adress="Ankara" work="Tekel" />
+                        {
+                            sellers.map((val, i) =>
+                                <CustomCard key={i} store={val} />
+                            )
+                        }
                     </Grid>
                 </Box>
             </section >
+            <Footer />
         </Container >
 
     )

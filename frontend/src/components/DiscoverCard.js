@@ -2,7 +2,7 @@ import { Card, Avatar, Typography, Divider, Button } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
 
-const CustomDiscoverCard = (props) => {
+const DiscoverCard = (props) => {
 
     return (
         <Card sx={{ p: 3, boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.1)", borderRadius: "20px" }}>
@@ -23,4 +23,4 @@ const CustomDiscoverCard = (props) => {
         </Card >
     )
 }
-export default CustomDiscoverCard
+export default DiscoverCard;

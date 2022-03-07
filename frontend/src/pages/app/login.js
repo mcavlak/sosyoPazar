@@ -28,8 +28,11 @@ const Page = () => {
                 enqueueSnackbar('Başarıyla giriş yaptın!', { variant: 'success' });
             }
         } catch (error) {
-            console.log(error)
-            enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            if (error?.response?.status === 400) {
+                enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+            } else {
+                enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            }
         }
     }
 
@@ -44,7 +47,7 @@ const Page = () => {
                     <Grid item xs={12} md={6} display='flex' justifyContent='center' alignItems='center'>
                         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 3rem", textAlign: "left" }}>
                             <h1 style={{ marginBottom: "2rem" }}>Pazar seni özlemişti hoşgeldin :)</h1>
-                            <input required onChange={(e) => onChangeInput(e)} name='username' type='text' className='customInput' placeholder="Kullanıcı Adın" />
+                            <input autoFocus required onChange={(e) => onChangeInput(e)} name='username' type='text' className='customInput' placeholder="Kullanıcı Adın" />
                             <input required onChange={(e) => onChangeInput(e)} name='password' type='password' className='customInput' placeholder="Şifren" />
                             <button type="submit" style={{ width: "100%" }} className='loginRegisterBtn'>Giriş Yap</button>
                         </form>

@@ -4,7 +4,7 @@ import { Autocomplete, Box, Container, Grid, Typography } from '@mui/material'
 import { Link, useHistory } from 'react-router-dom'
 import { getProvincesRequest } from '../../api/controllers/province-controller'
 import { getIndustryRequest } from '../../api/controllers/industy-controller'
-import { customerRegisterRequest } from '../../api/controllers/account-controller'
+import { sellerRegisterRequest } from '../../api/controllers/account-controller'
 import { useSnackbar } from 'notistack'
 
 
@@ -18,12 +18,13 @@ const Page = () => {
     const [selectedIndustry, setSelectedIndustry] = useState(null)
 
     const [form, setForm] = useState({
-        industryId: selectedIndustry?.id,
+        industryId: null,
         password: "",
-        provinceId: selectedIndustry?.id,
+        provinceId: null,
         storeName: "",
         username: ""
     })
+
 
 
     const onChangeInput = (e) => {
@@ -59,15 +60,21 @@ const Page = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        form.industryId = selectedIndustry?.id;
+        form.provinceId = selectedProvince?.id;
+        setForm({ ...form })
         try {
-            let res = await customerRegisterRequest(form);
+            let res = await sellerRegisterRequest(form);
             if (res) {
                 history.push('/dashboard');
                 enqueueSnackbar('Kaydın başarıyla yapıldı!', { variant: 'success' });
             }
         } catch (error) {
-            console.log(error)
-            enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            if (error?.response?.status === 400) {
+                enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+            } else {
+                enqueueSnackbar('Hatayla karşılaştık :(', { variant: 'error' });
+            }
         }
     }
 
@@ -78,7 +85,6 @@ const Page = () => {
         fetchIndustry()
 
     }, [])
-
 
     return (
         <Container>

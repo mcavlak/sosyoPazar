@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
 import SuspenseFallback from './SuspenseFallback';
 
 const index = lazy(() => import('../pages/app/index'));
@@ -20,9 +21,9 @@ const Router = () => {
                     <Route exact path="/" component={index} />
                     <Route exact path="/login" component={login} />
                     <Route exact path="/register" component={register} />
-                    <Route exact path="/dashboard" component={dashboard} />
-                    <Route exact path="/store" component={store} />
                     <Route exact path="/registerSeller" component={registerSeller} />
+                    <PrivateRoute exact path="/dashboard" component={dashboard} />
+                    <PrivateRoute exact path="/store" component={store} />
 
                 </Switch>
             </Suspense>
