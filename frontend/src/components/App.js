@@ -3,6 +3,7 @@ import React from 'react'
 import CustomThemeProvider from "./CustomThemeProvider"
 import ApiProvider from "../api/ApiProvider"
 import { SnackbarProvider } from 'notistack';
+import 'moment/locale/tr'  
 
 
 const App = () => {
