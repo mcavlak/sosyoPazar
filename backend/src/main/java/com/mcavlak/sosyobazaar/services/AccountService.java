@@ -1,9 +1,7 @@
 package com.mcavlak.sosyobazaar.services;
 
-import com.mcavlak.sosyobazaar.dtos.CustomerRegisterRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginResponseDto;
-import com.mcavlak.sosyobazaar.dtos.SellerRegisterRequestDto;
+import com.mcavlak.sosyobazaar.dtos.*;
+import com.mcavlak.sosyobazaar.enums.Role;
 
 public interface AccountService {
 
@@ -13,4 +11,7 @@ public interface AccountService {
 
     void registerSeller(SellerRegisterRequestDto sellerRegisterRequestDto);
 
+    UserDto getMe();
+
+    Role getMyRole();
 }

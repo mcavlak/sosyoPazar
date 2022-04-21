@@ -1,7 +1,10 @@
 package com.mcavlak.sosyobazaar.security;
 
+import com.mcavlak.sosyobazaar.enums.Role;
 import com.mcavlak.sosyobazaar.managers.UserDetailsManager;
 import com.mcavlak.sosyobazaar.models.CustomUserDetails;
+import com.mcavlak.sosyobazaar.models.entities.users.Customer;
+import com.mcavlak.sosyobazaar.models.entities.users.Seller;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -35,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtTokenUtil jwtTokenUtil;
 
 
+    @Transactional
     private void doWork(HttpServletRequest request) {
 
         //session already authenticated
@@ -65,6 +69,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //userdetails not found
         if (userDetails == null) {
             return;
+        }
+
+        if(userDetails.getUser().getRole() == Role.ROLE_CUSTOMER){
+            Customer c = (Customer) userDetails.getUser();
+            c.getFollows().size();
+        }
+        if(userDetails.getUser().getRole() == Role.ROLE_SELLER){
+            Seller s = (Seller) userDetails.getUser();
+            s.getFollowers().size();
         }
 
         //check validity

@@ -1,12 +1,13 @@
 package com.mcavlak.sosyobazaar.dtos;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CustomerDtoForSellerCommentDto {
+@NoArgsConstructor
+public class BaseDto {
 
-    private String name;
-
+    private Long id;
 }

@@ -2,10 +2,8 @@ package com.mcavlak.sosyobazaar.controllers;
 
 import com.mcavlak.sosyobazaar.annotations.Authenticated;
 import com.mcavlak.sosyobazaar.annotations.PermitAllCustom;
-import com.mcavlak.sosyobazaar.dtos.CustomerRegisterRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginResponseDto;
-import com.mcavlak.sosyobazaar.dtos.SellerRegisterRequestDto;
+import com.mcavlak.sosyobazaar.dtos.*;
+import com.mcavlak.sosyobazaar.enums.Role;
 import com.mcavlak.sosyobazaar.services.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/account")
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 @Authenticated
 public class AccountController {
 
@@ -22,6 +20,16 @@ public class AccountController {
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<Role> getMyRole() {
+        return ResponseEntity.ok(accountService.getMyRole());
+    }
+
+    @GetMapping("")
+    public @ResponseBody UserDto getMe() {
+        return accountService.getMe();
     }
 
     @PostMapping("/login")

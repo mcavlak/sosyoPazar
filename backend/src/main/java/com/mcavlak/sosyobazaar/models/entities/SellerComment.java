@@ -29,7 +29,6 @@ public class SellerComment extends LocalDateTimeEntity {
 
     private BigDecimal score;
 
-
     public static SellerComment create(Seller seller, String comment, BigDecimal score) {
         SellerComment sellerComment = new SellerComment();
         sellerComment.seller = seller;

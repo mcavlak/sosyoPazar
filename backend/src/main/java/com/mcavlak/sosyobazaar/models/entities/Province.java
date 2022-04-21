@@ -19,4 +19,10 @@ public class Province {
     @Column(name = "il_adi")
     private String provinceName;
 
+    public static Province create(Long id, String provinceName) {
+        Province province = new Province();
+        province.id = id;
+        province.provinceName = provinceName;
+        return province;
+    }
 }

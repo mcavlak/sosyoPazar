@@ -58,8 +58,10 @@ public class SellerCommentManager implements SellerCommentService {
 
         BigDecimal totalScore = sellerCommentList.stream().map(SellerComment::getScore).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal averageScore = totalScore.divide(new BigDecimal(size), 1, RoundingMode.HALF_UP);
-
+        BigDecimal averageScore = new BigDecimal(0);
+        if(size != 0){
+            averageScore = totalScore.divide(new BigDecimal(size), 1, RoundingMode.HALF_UP);
+        }
         return new AverageScoreDto(seller.getId(), averageScore);
 
     }

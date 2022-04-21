@@ -1,10 +1,10 @@
 package com.mcavlak.sosyobazaar.managers;
 
-import com.mcavlak.sosyobazaar.dtos.CustomerRegisterRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginRequestDto;
-import com.mcavlak.sosyobazaar.dtos.LoginResponseDto;
-import com.mcavlak.sosyobazaar.dtos.SellerRegisterRequestDto;
+import com.mcavlak.sosyobazaar.dtos.*;
+import com.mcavlak.sosyobazaar.enums.Role;
 import com.mcavlak.sosyobazaar.exception.IncorrectEntryException;
+import com.mcavlak.sosyobazaar.mappers.CustomerMapper;
+import com.mcavlak.sosyobazaar.mappers.SellerMapper;
 import com.mcavlak.sosyobazaar.models.CustomUserDetails;
 import com.mcavlak.sosyobazaar.models.entities.Industry;
 import com.mcavlak.sosyobazaar.models.entities.Province;
@@ -16,6 +16,7 @@ import com.mcavlak.sosyobazaar.security.JwtTokenUtil;
 import com.mcavlak.sosyobazaar.services.AccountService;
 import com.mcavlak.sosyobazaar.services.IndustryService;
 import com.mcavlak.sosyobazaar.services.ProvinceService;
+import com.mcavlak.sosyobazaar.utils.SecurityContextUtil;
 import com.mcavlak.sosyobazaar.validations.Validator;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -39,6 +40,8 @@ public class AccountManager implements AccountService {
     private final Validator validator;
     private final IndustryService industryService;
     private final ProvinceService provinceService;
+    private final CustomerMapper customerMapper;
+    private final SellerMapper sellerMapper;
 
     public AccountManager(UserRepository userRepository,
                           AuthenticationManager authenticationManager,
@@ -46,7 +49,7 @@ public class AccountManager implements AccountService {
                           BCryptPasswordEncoder bCryptPasswordEncoder,
                           Validator validator,
                           IndustryService industryService,
-                          ProvinceService provinceService) {
+                          ProvinceService provinceService, CustomerMapper customerMapper, SellerMapper sellerMapper) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -54,6 +57,8 @@ public class AccountManager implements AccountService {
         this.validator = validator;
         this.industryService = industryService;
         this.provinceService = provinceService;
+        this.customerMapper = customerMapper;
+        this.sellerMapper = sellerMapper;
     }
 
 
@@ -64,12 +69,22 @@ public class AccountManager implements AccountService {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             User currentUser = customUserDetails.getUser();
 
+            //bura hibernate follower ve follows çekmesi için, yoksa hibernate çekmiyor
+            if(currentUser.getRole() == Role.ROLE_SELLER){
+                Seller seller = (Seller) currentUser;
+                seller.getFollowers().size();
+            }
+            if(currentUser.getRole() == Role.ROLE_CUSTOMER){
+                Customer customer = (Customer) currentUser;
+                customer.getFollows().size();
+            }
+
             final String token = jwtTokenUtil.generate(customUserDetails, loginRequestDto.isRememberMe());
 
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(authentication);
 
-            return new LoginResponseDto(currentUser.getUsername(), token);
+            return new LoginResponseDto(currentUser.getUsername(), token, currentUser.getRole(),currentUser.getId());
 
         } catch (BadCredentialsException badCredentialsException) {
 
@@ -92,5 +107,25 @@ public class AccountManager implements AccountService {
         Industry industry = industryService.findDataById(sellerRegisterRequestDto.getIndustryId());
 
         userRepository.save(Seller.create(sellerRegisterRequestDto.getUsername(), bCryptPasswordEncoder.encode(sellerRegisterRequestDto.getPassword()), sellerRegisterRequestDto.getStoreName(), province, industry));
+    }
+
+    @Override
+    public UserDto getMe() {
+
+        User user = SecurityContextUtil.getCurrentUser();
+        if(user.getRole() == Role.ROLE_CUSTOMER){
+            CustomerDto c = customerMapper.entityToDto(SecurityContextUtil.getCurrentCustomer());
+            return c;
+        }
+        if(user.getRole() == Role.ROLE_SELLER){
+            Seller seller = SecurityContextUtil.getCurrentSeller();
+            return sellerMapper.entityToDto(seller);
+        }
+        return null;
+    }
+
+    @Override
+    public Role getMyRole() {
+        return SecurityContextUtil.getCurrentUser().getRole();
     }
 }
