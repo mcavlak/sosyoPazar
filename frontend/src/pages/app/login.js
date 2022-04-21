@@ -24,7 +24,7 @@ const Page = () => {
         try {
             let res = await loginRequest(form);
             if (res) {
-                history.push('/dashboard');
+                history.push(res.data.role === "ROLE_SELLER" ? '/store?id=' + res.data.id : '/dashboard');
                 enqueueSnackbar('Başarıyla giriş yaptın!', { variant: 'success' });
             }
         } catch (error) {

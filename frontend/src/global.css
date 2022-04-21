@@ -70,7 +70,6 @@ footer {
     background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.1);
-    text-align: center;
     overflow: hidden;
     margin-bottom: 2rem;
 }
@@ -242,4 +241,49 @@ footer {
 
 .cardText .MuiGrid-container {
     width: 90%;
+}
+
+.store-cover {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.store-cover::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 90%;
+    background: linear-gradient(0, rgba(255, 255, 255, 1) 0%, rgba(0, 0, 0, 0) 75%);
+    z-index: 1;
+}
+
+.store-profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.product-card {
+    height: 225px;
+    width: 100%;
+    box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }

@@ -8,6 +8,7 @@ const login = lazy(() => import('../pages/app/login'));
 const register = lazy(() => import('../pages/app/register'));
 const dashboard = lazy(() => import('../pages/app/dashboard'));
 const store = lazy(() => import('../pages/app/store'));
+const profile = lazy(() => import('../pages/app/profile'));
 const registerSeller = lazy(() => import('../pages/app/registerSeller'));
 
 
@@ -17,14 +18,13 @@ const Router = () => {
         <BrowserRouter>
             <Suspense fallback={<SuspenseFallback />}>
                 <Switch>
-
                     <Route exact path="/" component={index} />
                     <Route exact path="/login" component={login} />
                     <Route exact path="/register" component={register} />
                     <Route exact path="/registerSeller" component={registerSeller} />
                     <PrivateRoute exact path="/dashboard" component={dashboard} />
                     <PrivateRoute exact path="/store" component={store} />
-
+                    <PrivateRoute exact path="/profile" component={profile} />
                 </Switch>
             </Suspense>
         </BrowserRouter>

@@ -31,7 +31,7 @@ const Page = () => {
     return (
         <Container>
             <Navbar />
-            <section className='defaultSection'>
+            <section className='defaultSection' style={{ textAlign: 'center' }}>
                 <Box sx={{ margin: '2rem 0' }}>
                     <h2 className='title'>SosyoPazar'a Hoşgeldin!</h2>
                     <p className='subTitle'>Bugün çevrende ne arıyorsun?</p>
@@ -53,7 +53,7 @@ const Page = () => {
                     <Grid container spacing={2}>
                         {
                             sellers.map((val, i) =>
-                                <CustomCard key={i} store={val} />
+                                <CustomCard key={i} store={val} fetchSellers={fetchSellers} />
                             )
                         }
                     </Grid>

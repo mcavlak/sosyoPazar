@@ -36,20 +36,26 @@ const Page = () => {
         }, [])
 
         return (
-            posts.length > 0 ?
-                posts.map((val, i) =>
-                    <DiscoverCard key={i} postData={val} />
-                ) :
-                <Alert severity="warning">
-                    <AlertTitle>Henüz paylaşım yapılmamış :(</AlertTitle>
-                    Burada içerik görmek istersen daha fazla mağazayı <strong>takip etmelisin!</strong>
-                </Alert>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {
+                    posts.length > 0 ?
+                        posts.map((val, i) =>
+
+                            <DiscoverCard key={i} postData={val} />
+
+                        ) :
+                        <Alert severity="warning">
+                            <AlertTitle>Henüz paylaşım yapılmamış :(</AlertTitle>
+                            Burada içerik görmek istersen daha fazla mağazayı <strong>takip etmelisin!</strong>
+                        </Alert>
+                }
+            </Box>
         )
     }
 
     return (
 
-        <Box sx={{ textAlign: 'left', padding: '2rem' }}>
+        <Box sx={{ textAlign: 'left', padding: '2rem', minHeight: '60vh' }}>
             <h2 className='title'>hoşgeldin, {
                 user?.role === "ROLE_CUSTOMER" ?
                     user?.name :
@@ -68,9 +74,6 @@ const Page = () => {
                         sx={{ borderRight: 1, borderColor: 'divider' }}
                     >
                         <Tab sx={{ alignItems: 'flex-start' }} label={<p style={{ textAlign: 'left' }}>Keşfet</p>} {...a11yProps(0)} />
-                        <Tab sx={{ alignItems: 'flex-start' }} label={<Badge badgeContent={1} color="secondary">
-                            <p style={{ width: '100%', paddingRight: '1rem' }}>TEKLİFLERİM</p>
-                        </Badge>} {...a11yProps(2)} />
                         <Tab sx={{ alignItems: 'flex-start' }} label={
                             <p style={{ textAlign: 'left' }}>TAKİP ETTİKLERİM</p>
                         } {...a11yProps(3)} />

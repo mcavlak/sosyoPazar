@@ -11,14 +11,14 @@ import { savePostRequest } from '../api/controllers/post-controller'
 const Navbar = () => {
     const history = useHistory();
     const user = JSON.parse(localStorage.getItem("user"));
-    const { enqueueSnackbar } = useSnackbar();
+    const localProvince = JSON.parse(localStorage.getItem("localProvince"));
 
+    const { enqueueSnackbar } = useSnackbar();
 
     const [chooseProvinceModal, setChooseProvinceModal] = useState(false)
     const [createPostModal, setCreatePostModal] = useState(false)
 
-
-    const [selectedProvince, setSelectedProvince] = useState(null)
+    const [selectedProvince, setSelectedProvince] = useState(localProvince ? localProvince : null)
     const [provinces, setProvinces] = useState([])
     const [postContent, setPostContent] = useState("")
 
@@ -60,6 +60,7 @@ const Navbar = () => {
         await localStorage.removeItem("token");
         await localStorage.removeItem("user");
         history.push('/')
+        enqueueSnackbar('Oturumun sonlandı!', { variant: 'info' });
     }
 
 
@@ -76,7 +77,8 @@ const Navbar = () => {
             <div className="nav-buttons">
                 {
                     user?.role === "ROLE_CUSTOMER" ?
-                        <button className="navButton" onClick={() => history.push('/dashboard')}>Keşfet</button> :
+                        <button className="navButton" onClick={() => history.push('/')}>Keşfet</button>
+                        :
                         user?.role === "ROLE_SELLER" ?
                             <button className="navButton" onClick={() => setCreatePostModal(true)}>Paylaşım Yap</button> : ""
                 }
@@ -134,12 +136,22 @@ const Navbar = () => {
                         }
                     </MenuItem>
                     <Divider />
-                    <MenuItem>
-                        <ListItemIcon>
-                            <PersonOutlineRounded fontSize="small" />
-                        </ListItemIcon>
-                        Hesabım
-                    </MenuItem>
+                    {
+                        user?.role === "ROLE_SELLER" ?
+                            <MenuItem onClick={() => history.push(`/store?id=${user?.id}`)}>
+                                <ListItemIcon>
+                                    <PersonOutlineRounded fontSize="small" />
+                                </ListItemIcon>
+                                Hesabım
+                            </MenuItem> :
+                            <MenuItem onClick={() => history.push(`/dashboard`)}>
+                                <ListItemIcon>
+                                    <PersonOutlineRounded fontSize="small" />
+                                </ListItemIcon>
+                                Bana Özel
+                            </MenuItem>
+
+                    }
                     <MenuItem onClick={() => logout()}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
@@ -158,7 +170,7 @@ const Navbar = () => {
                     <Link to={'/'}>SosyoPazar</Link >
                     <span style={{ margin: "0 .5rem" }}>|</span>
                     <button className="navButton" style={{ backgroundColor: 'rgba(169, 146, 125, 0.25)' }} onClick={() => setChooseProvinceModal(true)} >
-                        {selectedProvince ? selectedProvince : 'Şehir Seçin'}
+                        {selectedProvince ? selectedProvince?.provinceName : 'Şehir Seçin'}
                     </button>
                 </div>
                 {
@@ -193,8 +205,9 @@ const Navbar = () => {
                         value={selectedProvince}
                         onChange={(event, newValue) => {
                             setSelectedProvince(newValue);
+                            localStorage.setItem('localProvince', JSON.stringify(newValue));
                         }}
-                        getOptionLabel={(option) => option?.provinceName}
+                        getOptionLabel={(option) => option.provinceName}
                         renderInput={(params) => <TextField {...params} label="Şehir seçin" />}
                     />
                 </DialogContent>

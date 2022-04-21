@@ -24,6 +24,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
             if (error?.response?.status === 401) {
                 setAUTH_STATUS("FAILED")
                 localStorage.removeItem('user');
+                localStorage.removeItem('token');
             }
         }
     }
