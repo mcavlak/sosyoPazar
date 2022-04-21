@@ -1,31 +1,90 @@
-import { AddCircleRounded, GroupAddRounded } from '@mui/icons-material'
+import { AddCircleRounded, GroupAddRounded, RemoveCircleOutlineRounded } from '@mui/icons-material'
 import { Card, Grid, IconButton, Rating, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import React from 'react'
+import { useSnackbar } from 'notistack'
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { getSellerAverageRequest } from '../api/controllers/seller-comment-controller'
+import { updFollowSellerRequest, updUnFollowSellerRequest } from '../api/controllers/seller-controller'
 
-const CustomCard = ({ store }) => {
+const CustomCard = ({ store, fetchSellers }) => {
+    const { enqueueSnackbar } = useSnackbar();
+
+    const [avarageScore, setAvarageScore] = useState(0)
+
+
+    const followFunc = async () => {
+        try {
+            if (store?.followed === true) {
+                let res = await updUnFollowSellerRequest(store.id);
+
+                if (res) {
+                    enqueueSnackbar('Mağazayı takibi bıraktın :(', { variant: 'error' });
+                    fetchSellers()
+
+                }
+            } else if (store?.followed === false) {
+                let res = await updFollowSellerRequest(store.id);
+
+                if (res) {
+                    enqueueSnackbar('Mağazayı takip ettin!', { variant: 'success' });
+                    fetchSellers()
+                }
+            } else {
+                enqueueSnackbar('Lütfen giriş yapın!', { variant: 'warning' });
+            }
+        } catch (error) {
+            if (error.response.status === 401) {
+                enqueueSnackbar('Takip işlemi yapabilmek için kullanıcı girişi yapmalısın!', { variant: 'warning' });
+            }
+        }
+    }
+
+
+    const fetchAvarageScore = async () => {
+        try {
+            let res = await getSellerAverageRequest(store?.id);
+
+            if (res) {
+                setAvarageScore(res.data.avarageScore)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    useEffect(() => {
+
+        fetchAvarageScore()
+
+    }, [])
 
     return (
-        <Grid item md={3} sm={6} sx={{ width: '100%' }}>
+        <Grid item md={4} sm={6} sx={{ width: '100%' }}>
             <Card sx={{ borderRadius: "20px", boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.1)" }}>
                 <Box
                     className="cardImg"
                     sx={{
-                        backgroundImage: `url("/assets/baharatci.jpg")`,
-
+                        backgroundImage: store?.coverPhoto ? `url(data:image/jpeg;base64,${store?.coverPhoto})` : "url(https://source.unsplash.com/random)",
                     }}>
                     <Box
                         className="cardFollow"
                     >
                         <IconButton
+                            onClick={() => followFunc()}
                             sx={{
                                 color: "#ffffff"
                             }}>
-                            <AddCircleRounded />
+                            {
+                                store?.followed ?
+                                    <RemoveCircleOutlineRounded /> :
+                                    <AddCircleRounded />
+                            }
                         </IconButton>
                     </Box>
                     <Box className="cardRating">
-                        <Rating value={5} readOnly size="small" />
+                        <Rating value={avarageScore ? avarageScore : 0} readOnly size="small" />
                     </Box>
                 </Box>
                 <Box
@@ -33,19 +92,20 @@ const CustomCard = ({ store }) => {
                     <Box
                         className="cardUserImg"
                         sx={{
-                            backgroundImage: `url("/assets/baharatci.jpg")`,
-
+                            backgroundImage: store?.profilePhoto ? `url(data:image/jpeg;base64,${store?.profilePhoto})` : "url(https://source.unsplash.com/random)",
                         }}>
                     </Box>
                     <Box
                         className="cardFollowers">
                         <GroupAddRounded color="gray" sx={{ fontSize: 16 }} />
                         <Typography margin={0.5} color="gray" fontSize={12}>Takipçi:</Typography>
-                        <Typography fontSize={13} color="gray" fontWeight={600}>{20}</Typography>
+                        <Typography fontSize={13} color="gray" fontWeight={600}>{store?.followersCount}</Typography>
                     </Box>
                     <Box
                         className="cardTitle">
-                        <h3>{store?.storeName}</h3>
+                        <Link to={`/store?id=${store?.id}`}>
+                            <h3>{store?.storeName}</h3>
+                        </Link>
                     </Box>
                     <Box
                         className="cardText">
