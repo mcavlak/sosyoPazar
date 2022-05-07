@@ -76,11 +76,8 @@ const Navbar = () => {
         return (
             <div className="nav-buttons">
                 {
-                    user?.role === "ROLE_CUSTOMER" ?
-                        <button className="navButton" onClick={() => history.push('/')}>Keşfet</button>
-                        :
-                        user?.role === "ROLE_SELLER" ?
-                            <button className="navButton" onClick={() => setCreatePostModal(true)}>Paylaşım Yap</button> : ""
+                    user?.role === "ROLE_CUSTOMER" &&
+                    <button className="navButton" onClick={() => history.push('/')}>Keşfet</button>
                 }
                 <Tooltip title="Hesabım">
                     <IconButton
@@ -142,7 +139,7 @@ const Navbar = () => {
                                 <ListItemIcon>
                                     <PersonOutlineRounded fontSize="small" />
                                 </ListItemIcon>
-                                Hesabım
+                                Profilim
                             </MenuItem> :
                             <MenuItem onClick={() => history.push(`/dashboard`)}>
                                 <ListItemIcon>
@@ -206,6 +203,7 @@ const Navbar = () => {
                         onChange={(event, newValue) => {
                             setSelectedProvince(newValue);
                             localStorage.setItem('localProvince', JSON.stringify(newValue));
+                            window.location.reload();
                         }}
                         getOptionLabel={(option) => option.provinceName}
                         renderInput={(params) => <TextField {...params} label="Şehir seçin" />}

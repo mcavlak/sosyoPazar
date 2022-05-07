@@ -4,7 +4,7 @@ import { getSellerRequest, updFollowSellerRequest, updUnFollowSellerRequest } fr
 import { getSellerAverageRequest, getSellerCommentsRequest, saveSellerCommentRequest } from '../../api/controllers/seller-comment-controller';
 import { a11yProps, TabPanel } from '../../components/MuiTabPanel';
 import { CloseRounded, GroupAddRounded, GroupRemoveRounded } from '@mui/icons-material';
-import { getPostsBySellerIdRequest } from '../../api/controllers/post-controller';
+import { getPostsBySellerIdRequest, savePostRequest } from '../../api/controllers/post-controller';
 import DiscoverCard from '../../components/DiscoverCard';
 import { useSnackbar } from 'notistack';
 import CommentCard from '../../components/CommentCard';
@@ -27,7 +27,7 @@ const Page = () => {
     //MUI DIALOG
     const [commentDialog, setCommentDialog] = useState(false)
     const [productDialog, setProductDialog] = useState(false)
-
+    const [postDialog, setPostDialog] = useState(false)
 
     //FIND SELLER ID
     const sellerId = (new URLSearchParams(window.location.search)).get("id")
@@ -70,6 +70,27 @@ const Page = () => {
             let res = await getPostsBySellerIdRequest(sellerId);
             if (res) {
                 setStorePostList(res.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    //ADD STORE POST
+    const [post, setPost] = useState({
+        content: "",
+    })
+
+    const handleAddPost = async () => {
+        try {
+            let res = await savePostRequest(post);
+            if (res) {
+                enqueueSnackbar('Başarıyla paylaşım yaptın!', { variant: 'success' });
+                setPost({
+                    content: "",
+                })
+                fetchStorePosts()
             }
         } catch (error) {
             console.log(error);
@@ -138,6 +159,9 @@ const Page = () => {
 
     //ADD PRODUCT
     const [selectedImage, setSelectedImage] = useState("")
+    const [product, setProduct] = useState({
+        file: null, productName: ""
+    })
     const productImageUpload = (imageList, addUpdateIndex) => {
         console.log(imageList, addUpdateIndex);
 
@@ -150,11 +174,6 @@ const Page = () => {
         product.file = (formData)
         setProduct({ ...product })
     };
-    const [product, setProduct] = useState({
-        file: null,
-        productName: "",
-    })
-
     const closeProductDialog = () => {
         setProduct({
             file: null,
@@ -174,6 +193,9 @@ const Page = () => {
             console.log(error);
         }
     }
+
+    console.log(product)
+
 
     //FOLLOW FUNC
     const followFunc = async () => {
@@ -268,6 +290,18 @@ const Page = () => {
                     </Box>
                     <TabPanel value={tabValue} index={0}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '2rem 2rem 2rem 1rem' }}>
+                            {
+                                myProfile &&
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem', }}>
+                                    <TextField fullWidth variant='outlined' label="Paylaşmak istediklerinizi yazın" multiline minRows={2} onChange={(e) => {
+                                        post.content = e.target.value
+                                        setPost({ ...post })
+                                    }} />
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Button disabled={!post.content} variant='outlined' onClick={() => handleAddPost()}>Paylaş</Button>
+                                    </Box>
+                                </Box>
+                            }
                             {
                                 storePostList.length > 0 ?
                                     storePostList.map((val, i) =>
@@ -440,6 +474,7 @@ const Page = () => {
                     <Button onClick={() => handleAddProduct()} variant='contained'>Ekle</Button>
                 </DialogActions>
             </Dialog >
+
         </>
     )
 }

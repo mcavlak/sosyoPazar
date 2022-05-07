@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Badge, Box, Divider, Tab, Tabs, Grid, Alert, AlertTitle } from '@mui/material'
+import { Badge, Box, Divider, Tab, Tabs, Grid, Alert, AlertTitle, IconButton, ListItem, List, ListItemAvatar, Avatar, ListItemText } from '@mui/material'
 import DiscoverCard from '../../components/DiscoverCard';
 import { a11yProps, TabPanel } from '../../components/MuiTabPanel';
 import { getFollowingPostsRequest } from '../../api/controllers/post-controller';
+import { getMyFollows } from '../../api/controllers/customer-controller';
+import { RemoveCircleRounded } from '@mui/icons-material';
 
 
 const Page = () => {
@@ -13,27 +15,43 @@ const Page = () => {
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
     };
+    const [posts, setPosts] = useState([])
+    const [myFollows, setMyFollows] = useState([])
+
+
+
+    const fetchMyFollows = async () => {
+        try {
+            let res = await getMyFollows();
+            if (res) {
+                setMyFollows(res.data)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const fetchPosts = async () => {
+        try {
+            let res = await getFollowingPostsRequest();
+            if (res) {
+                setPosts(res.data)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    useEffect(() => {
+
+        fetchMyFollows()
+        fetchPosts()
+
+    }, [])
+
 
     const Discover = () => {
-
-        const [posts, setPosts] = useState([])
-
-        const fetchPosts = async () => {
-            try {
-                let res = await getFollowingPostsRequest();
-                if (res) {
-                    setPosts(res.data)
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-
-        useEffect(() => {
-
-            fetchPosts()
-
-        }, [])
 
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -84,13 +102,27 @@ const Page = () => {
                         <Discover />
                     </TabPanel>
                     <TabPanel value={tabValue} index={1}>
-                        asdfdsafdsfadfadfgafdgdfsgsdfgfdagadfgadfgdfgdfg
-                    </TabPanel>
-                    <TabPanel value={tabValue} index={2}>
-                        Item Three
-                    </TabPanel>
-                    <TabPanel value={tabValue} index={3}>
-                        Item Four
+                        <List>
+                            {
+                                myFollows.map((val) =>
+                                    <ListItem
+                                        key={val?.id}
+                                        secondaryAction={
+                                            <IconButton edge="end" aria-label="delete">
+                                                <RemoveCircleRounded />
+                                            </IconButton>
+                                        }
+                                    >
+                                        <ListItemAvatar>
+                                            <Avatar src={'data:image/jpeg;base64,' + val?.profilePhoto} />
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={val?.storeName}
+                                        />
+                                    </ListItem>
+                                )
+                            }
+                        </List>
                     </TabPanel>
                 </Grid>
             </Grid>

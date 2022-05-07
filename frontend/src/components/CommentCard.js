@@ -14,7 +14,7 @@ const CommentCard = ({ commentData }) => {
                         readOnly
                     />
                 </Box>
-                <Typography variant='p' sx={{ margin: 0, fontWeight: 300 }}><span style={{ fontWeight: 400 }}>{commentData?.contentOwner?.storeName}</span> | {moment(commentData?.createdDateTime).startOf().fromNow()}</Typography>
+                <Typography variant='p' sx={{ margin: 0, fontWeight: 300 }}><span style={{ fontWeight: 400 }}>{commentData?.customer?.name}</span> | {moment(commentData?.createdDateTime).startOf().fromNow()}</Typography>
                 {/* <Button sx={{ justifySelf: "end" }}>TEKLİF VER</Button> */}
             </Box>
             <Divider sx={{ my: 2 }} />

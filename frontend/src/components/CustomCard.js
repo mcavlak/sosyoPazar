@@ -1,17 +1,14 @@
-import { AddCircleRounded, GroupAddRounded, RemoveCircleOutlineRounded } from '@mui/icons-material'
+import { AddCircleRounded, GroupAddRounded, RemoveCircleOutlineRounded, RemoveCircleRounded } from '@mui/icons-material'
 import { Card, Grid, IconButton, Rating, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useSnackbar } from 'notistack'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
-import { getSellerAverageRequest } from '../api/controllers/seller-comment-controller'
 import { updFollowSellerRequest, updUnFollowSellerRequest } from '../api/controllers/seller-controller'
 
 const CustomCard = ({ store, fetchSellers }) => {
     const { enqueueSnackbar } = useSnackbar();
-
-    const [avarageScore, setAvarageScore] = useState(0)
-
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const followFunc = async () => {
         try {
@@ -40,26 +37,6 @@ const CustomCard = ({ store, fetchSellers }) => {
         }
     }
 
-
-    const fetchAvarageScore = async () => {
-        try {
-            let res = await getSellerAverageRequest(store?.id);
-
-            if (res) {
-                setAvarageScore(res.data.avarageScore)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-
-    useEffect(() => {
-
-        fetchAvarageScore()
-
-    }, [])
-
     return (
         <Grid item md={4} sm={6} sx={{ width: '100%' }}>
             <Card sx={{ borderRadius: "20px", boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.1)" }}>
@@ -68,23 +45,26 @@ const CustomCard = ({ store, fetchSellers }) => {
                     sx={{
                         backgroundImage: store?.coverPhoto ? `url(data:image/jpeg;base64,${store?.coverPhoto})` : "url(https://source.unsplash.com/random)",
                     }}>
-                    <Box
-                        className="cardFollow"
-                    >
-                        <IconButton
-                            onClick={() => followFunc()}
-                            sx={{
-                                color: "#ffffff"
-                            }}>
-                            {
-                                store?.followed ?
-                                    <RemoveCircleOutlineRounded /> :
-                                    <AddCircleRounded />
-                            }
-                        </IconButton>
-                    </Box>
+                    {
+                        user?.role === "ROLE_CUSTOMER" &&
+                        <Box
+                            className="cardFollow"
+                        >
+                            <IconButton
+                                onClick={() => followFunc()}
+                                sx={{
+                                    color: "#ffffff"
+                                }}>
+                                {
+                                    store?.followed ?
+                                        <RemoveCircleRounded /> :
+                                        <AddCircleRounded />
+                                }
+                            </IconButton>
+                        </Box>
+                    }
                     <Box className="cardRating">
-                        <Rating value={avarageScore ? avarageScore : 0} readOnly size="small" />
+                        <Rating value={store?.averageScore} readOnly size="small" />
                     </Box>
                 </Box>
                 <Box

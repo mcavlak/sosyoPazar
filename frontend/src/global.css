@@ -209,6 +209,9 @@ footer {
     left: 1.5rem;
     top: -1.5rem;
     border: 3px solid #ffffff;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .discoverCardUserImg {
