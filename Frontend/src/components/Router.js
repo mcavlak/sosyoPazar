@@ -9,9 +9,6 @@ import Store from "../pages/Store";
 import PrivateRoute from "./PrivateRoute";
 
 const Router = () => {
-
-  
-
     return (
         <BrowserRouter>
             <Routes>

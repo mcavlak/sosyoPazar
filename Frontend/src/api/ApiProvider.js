@@ -3,7 +3,6 @@ import { useMemo } from "react"
 
 export const BASE_URL = "http://localhost:8080"
 
-
 axios.defaults.baseURL = `${BASE_URL}/api/`
 
 const ApiProvider = ({ children }) => {

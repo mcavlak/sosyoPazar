@@ -54,7 +54,7 @@ const Search = () => {
         <CustomLayout>
             <Box sx={{ textAlign: "center" }}>
                 <Box sx={{ mt: 10 }}>
-                    <input value={inputText} onChange={(e) => setInputText(e.target.value)} className='searchInput' placeholder='Mağaza veya ürün arayın' type="text" />
+                    <input value={inputText} onChange={(e) => setInputText(e.target.value)} className='searchInput' placeholder='Mağaza, sektör veya ürün arayın' type="text" />
                 </Box>
                 <img style={{ width: "100%", height: "auto", marginTop: "2rem" }} src='/assets/searchImage.svg' alt='' />
                 <Box style={{ width: "100%", height: "5rem", marginTop: "-4rem", backgroundColor: "rgba(169, 146, 125, 0.5)" }} />
