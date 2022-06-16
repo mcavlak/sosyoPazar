@@ -18,13 +18,14 @@ import { BASE_URL } from '../api/ApiProvider';
 const Store = () => {
     const { enqueueSnackbar } = useSnackbar();
     const sellerId = (new URLSearchParams(window.location.search)).get("id")
+    const user = JSON.parse(localStorage.getItem("user"));
     const [myProfile, setMyProfile] = useState(false)
 
-    useLayoutEffect(() => {
-        const x = new URLSearchParams(window.location.search).get("id");
-        const y = JSON.parse(localStorage.getItem("user"));
-        setMyProfile(parseInt(x) === parseInt(y?.id))
-    }, [])
+    useEffect(() => {
+        if (parseInt(sellerId) === parseInt(user?.id)) {
+            setMyProfile(true)
+        }
+    }, [sellerId, user])
 
     //MUI TAB
     const [tabValue, setTabValue] = useState(0);
