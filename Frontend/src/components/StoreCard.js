@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { BASE_URL } from '../api/ApiProvider'
 import { updFollowSellerRequest, updUnFollowSellerRequest } from '../api/controllers/seller-controller'
 
 const StoreCard = ({ store, fetchSellers }) => {
@@ -47,14 +48,14 @@ const StoreCard = ({ store, fetchSellers }) => {
 
     const checkPhotos = async () => {
         try {
-            let cpRes = await axios.get(`http://localhost:8080/api/seller/${store.id}/coverPhoto`);
-            let ppRes = await axios.get(`http://localhost:8080/api/seller/${store.id}/profilePhoto`);
+            let cpRes = await axios.get(`${BASE_URL}/api/seller/${store.id}/coverPhoto`);
+            let ppRes = await axios.get(`${BASE_URL}/api/seller/${store.id}/profilePhoto`);
 
             if (cpRes) {
-                setCp(`http://localhost:8080/api/seller/${store.id}/coverPhoto`);
+                setCp(`${BASE_URL}/api/seller/${store.id}/coverPhoto`);
             }
             if (ppRes) {
-                setPp(`http://localhost:8080/api/seller/${store.id}/profilePhoto`);
+                setPp(`${BASE_URL}/api/seller/${store.id}/profilePhoto`);
             }
         } catch (error) {
         }
@@ -72,7 +73,7 @@ const StoreCard = ({ store, fetchSellers }) => {
                     className="cardImg"
                     sx={{
                         backgroundSize: cp ? "cover" : "contain",
-                        backgroundImage: cp ? `url(http://localhost:8080/api/seller/${store.id}/coverPhoto)` : "url(/assets/no-image.svg)",
+                        backgroundImage: cp ? `url(${BASE_URL}/api/seller/${store.id}/coverPhoto)` : "url(/assets/no-image.svg)",
                     }}>
                     {
                         user?.role === "ROLE_CUSTOMER" &&
@@ -101,7 +102,7 @@ const StoreCard = ({ store, fetchSellers }) => {
                     <Box
                         className="cardUserImg"
                         sx={{
-                            backgroundImage: pp ? `url(http://localhost:8080/api/seller/${store.id}/profilePhoto)` : "url(/assets/no-image.svg)",
+                            backgroundImage: pp ? `url(${BASE_URL}/api/seller/${store.id}/profilePhoto)` : "url(/assets/no-image.svg)",
                         }}>
                     </Box>
                     <Box

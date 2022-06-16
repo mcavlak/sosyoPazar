@@ -17,6 +17,6 @@ public interface ProductService {
     ProductDto getByProductId(Long productId);
     void saveProductPhoto(Long productId, FileUploadUtil.FileResult fileResult );
     List<ProductWithoutSellerPhotoDto> findAllByContentOwnerId(Long contentOwnerId);
-    List<ProductDto> findAllByProvinceIdAndStoreNameOrProductName(Long provinceId, String searchName);
+    List<ProductWithoutSellerPhotoDto> findAllByProvinceIdAndStoreNameOrProductName(Long provinceId, String searchName);
     ProductPhoto getProductPhoto(Long id,Long productPhotoId);
 }

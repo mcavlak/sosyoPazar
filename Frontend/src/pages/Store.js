@@ -13,16 +13,17 @@ import StoreComment from '../components/StoreComment';
 import StoreProduct from '../components/StoreProduct';
 import StoreContact from '../components/StoreContact';
 import axios from 'axios';
+import { BASE_URL } from '../api/ApiProvider';
 
 const Store = () => {
     const { enqueueSnackbar } = useSnackbar();
-
+    const sellerId = (new URLSearchParams(window.location.search)).get("id")
     const [myProfile, setMyProfile] = useState(false)
 
     useLayoutEffect(() => {
-        const x = JSON.parse(localStorage.getItem("user"));
-        const y = x?.role === "ROLE_SELLER" && sellerId === x?.id;
-        setMyProfile(y);
+        const x = new URLSearchParams(window.location.search).get("id");
+        const y = JSON.parse(localStorage.getItem("user"));
+        setMyProfile(parseInt(x) === parseInt(y?.id))
     }, [])
 
     //MUI TAB
@@ -33,9 +34,6 @@ const Store = () => {
 
     //MUI DIALOG
     const [commentDialog, setCommentDialog] = useState(false)
-
-    //FIND SELLER ID
-    const sellerId = (new URLSearchParams(window.location.search)).get("id")
 
     //GET STORE
     const [store, setStore] = useState(null)
@@ -145,14 +143,14 @@ const Store = () => {
 
     const checkPhotos = async () => {
         try {
-            let cpRes = await axios.get(`http://localhost:8080/api/seller/${sellerId}/coverPhoto`);
-            let ppRes = await axios.get(`http://localhost:8080/api/seller/${sellerId}/profilePhoto`);
+            let cpRes = await axios.get(`${BASE_URL}/api/seller/${sellerId}/coverPhoto`);
+            let ppRes = await axios.get(`${BASE_URL}/api/seller/${sellerId}/profilePhoto`);
 
             if (cpRes) {
-                setCp(`http://localhost:8080/api/seller/${sellerId}/coverPhoto`);
+                setCp(`${BASE_URL}/api/seller/${sellerId}/coverPhoto`);
             }
             if (ppRes) {
-                setPp(`http://localhost:8080/api/seller/${sellerId}/profilePhoto`);
+                setPp(`${BASE_URL}/api/seller/${sellerId}/profilePhoto`);
             }
         } catch (error) {
         }
@@ -164,18 +162,20 @@ const Store = () => {
         fetchStoreScore()
     }, [])
 
+
+
     return (
         <Container>
             <Navbar />
             <section className='defaultSection'>
                 {
                     myProfile ?
-                        <SellerCoverPhoto photoUrl={store?.coverPhoto} fetchStore={fetchStore} /> :
+                        <SellerCoverPhoto photoUrl={cp} fetchStore={fetchStore} /> :
                         <Box
                             className='store-cover'
                             sx={{
                                 backgroundSize: cp ? "cover" : "contain",
-                                backgroundImage: cp ? `url(http://localhost:8080/api/seller/${store?.id}/coverPhoto)` : "url(/assets/no-image.svg)"
+                                backgroundImage: cp ? `url(${BASE_URL}/api/seller/${store?.id}/coverPhoto)` : "url(/assets/no-image.svg)"
                             }} />
                 }
                 <Grid container spacing={2} pb={5} >
@@ -184,12 +184,12 @@ const Store = () => {
                             {
                                 myProfile ?
                                     <SellerProfilePhoto
-                                        photoUrl={store?.profilePhoto}
+                                        photoUrl={pp}
                                         fetchStore={fetchStore}
                                     /> :
                                     <Box
                                         className='store-profile-img'
-                                        sx={{ backgroundImage: pp ? `url(http://localhost:8080/api/seller/${store?.id}/profilePhoto)` : "url(/assets/no-image.svg)", cursor: 'pointer' }} />
+                                        sx={{ backgroundImage: pp ? `url(${BASE_URL}/api/seller/${store?.id}/profilePhoto)` : "url(/assets/no-image.svg)", cursor: 'pointer' }} />
                             }
                             <Typography variant='overline' sx={{ mt: '1rem', mb: '.5rem', lineHeight: 'normal' }} fontSize={18}>{store?.storeName}</Typography>
                             <Rating

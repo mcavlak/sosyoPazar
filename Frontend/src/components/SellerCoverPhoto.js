@@ -28,7 +28,7 @@ const SellerCoverPhoto = ({ photoUrl, fetchStore }) => {
             {({
                 onImageUpload,
             }) => (
-                <Box className='store-cover' sx={{ backgroundImage: `url(data:image/jpeg;base64,${photoUrl})`, position: "relative" }}>
+                <Box className='store-cover' sx={{ backgroundImage: `url(${photoUrl})`, position: "relative" }}>
                     <Button sx={{ color: "#fff", position: "absolute", top: "1rem", right: "1rem" }} startIcon={<AddPhotoAlternateRounded />} onClick={onImageUpload}>Kapağı Değiştir</Button>
                 </Box >
             )

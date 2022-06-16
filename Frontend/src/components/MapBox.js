@@ -1,7 +1,6 @@
 import Map, { Marker } from 'react-map-gl';
 
 function MapBox({ latitude, longitude }) {
-    console.log(latitude);
     return (
         <Map
             mapboxAccessToken="pk.eyJ1IjoibWNhdmxhayIsImEiOiJjbDM5b3g2eTAwYnVhM2pyMzEwd3ZlN3dpIn0.XDVEAmyp5LCGV_YMuLb7JA"

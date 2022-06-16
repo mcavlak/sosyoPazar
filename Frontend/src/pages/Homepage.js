@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Grid, Container, Divider } from '@mui/material'
+import { Box, Grid, Container, Divider, Typography } from '@mui/material'
 import Navbar from '../components/Navbar';
 import { getSellersRequest } from '../api/controllers/seller-controller'
 import StoreCard from '../components/StoreCard';
@@ -41,7 +41,6 @@ const Homepage = () => {
         fetchSellers();
 
     }, [])
-
     return (
         <Container>
             <Navbar />
@@ -64,9 +63,31 @@ const Homepage = () => {
                     <Divider sx={{ my: "1rem" }} />
                     <Grid container spacing={2}>
                         {
-                            sellers.map((val, i) =>
-                                <StoreCard key={i} store={val} fetchSellers={fetchSellers} />
-                            )
+                            sellers.length > 0 ?
+                                sellers.map((val, i) =>
+                                    <StoreCard key={i} store={val} fetchSellers={fetchSellers} />
+                                ) :
+                                <Grid item xs={12} md={12}>
+                                    <Box sx={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        gap: "2rem",
+                                        marginTop: "1rem"
+                                    }}>
+                                        <img
+                                            style={{
+                                                width: "30%",
+                                                height: "auto"
+                                            }}
+                                            src="/assets/bulunamadi.svg"
+                                            alt=""
+                                        />
+                                        <Typography variant="h5">
+                                            Bu bölgede henüz dükkan bulunmuyor!
+                                        </Typography>
+                                    </Box>
+                                </Grid>
                         }
                     </Grid>
                 </Box>

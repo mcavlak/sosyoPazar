@@ -85,9 +85,21 @@ public class ProductManager implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findAllByProvinceIdAndStoreNameOrProductName(Long provinceId, String searchName) {
+    public List<ProductWithoutSellerPhotoDto> findAllByProvinceIdAndStoreNameOrProductName(Long provinceId, String searchName) {
+        List<ProductWithoutSellerPhotoDto> productWithoutSellerPhotoDtoList = new ArrayList<>();
+        List<Product> productList = productRepository.findByProductNameOrStoreNameByProvince(searchName, searchName, provinceId);
 
-        return productMapper.entityListToDtoList(productRepository.findByProductNameOrStoreNameByProvince(searchName, searchName, provinceId));
+        for (Product product : productList){
+
+            List<ProductPhoto> productPhotoList = productPhotoRepository.findByProduct_Id(product.getId());
+            List<Long> photoIdlist = productPhotoList.stream().map(ProductPhoto::getId).collect(Collectors.toList());
+            ProductWithoutSellerPhotoDto productWithoutSellerPhotoDto = productWithoutSellerPhotoMapper.entityToDto(product);
+            productWithoutSellerPhotoDto.setPhotoIdList(photoIdlist);
+            productWithoutSellerPhotoDtoList.add(productWithoutSellerPhotoDto);
+        }
+
+        // return productWithoutSellerPhotoMapper.entityListToDtoList(productList);
+        return productWithoutSellerPhotoDtoList;
     }
 
     @Override

@@ -7,7 +7,6 @@ import { addProfilePhoto } from '../api/controllers/seller-controller';
 const SellerProfilePhoto = ({ photoUrl, fetchStore }) => {
 
     const onChange = async (imageList, addUpdateIndex) => {
-        console.log(imageList, addUpdateIndex);
 
         let formData = new FormData();
 
@@ -28,7 +27,7 @@ const SellerProfilePhoto = ({ photoUrl, fetchStore }) => {
             {({
                 onImageUpload,
             }) => (
-                <Box onClick={onImageUpload} className='store-profile-img' sx={{ backgroundImage: `url(data:image/jpeg;base64,${photoUrl})`, cursor: 'pointer', overflow: "hidden" }}>
+                <Box onClick={onImageUpload} className='store-profile-img' sx={{ backgroundImage: `url(${photoUrl})`, cursor: 'pointer', overflow: "hidden" }}>
                     <Box sx={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(255, 255, 255, .5)" }}>
                         <AddPhotoAlternateRounded sx={{ color: "primary" }} />
                     </Box>

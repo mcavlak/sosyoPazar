@@ -48,7 +48,7 @@ public class ProductController {
     }
 
     @GetMapping("/search/byProvince")
-    public ResponseEntity<List<ProductDto>> findByStoreNameOrIndustryNameAndProvinceId(@RequestParam(name = "searchText") String searchText, @RequestParam(name = "provinceId") Long provinceId) {
+    public ResponseEntity<List<ProductWithoutSellerPhotoDto>> findByStoreNameOrIndustryNameAndProvinceId(@RequestParam(name = "searchText") String searchText, @RequestParam(name = "provinceId") Long provinceId) {
         return ResponseEntity.ok(productService.findAllByProvinceIdAndStoreNameOrProductName(provinceId, searchText));
     }
 

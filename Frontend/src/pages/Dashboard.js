@@ -6,6 +6,8 @@ import { getFollowingPostsRequest } from '../api/controllers/post-controller';
 import { getMyFollows } from '../api/controllers/customer-controller';
 import { RemoveCircleRounded } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
+import { updUnFollowSellerRequest } from '../api/controllers/seller-controller';
+import { BASE_URL } from '../api/ApiProvider';
 
 
 const Dashboard = () => {
@@ -54,6 +56,19 @@ const Dashboard = () => {
             } else {
                 enqueueSnackbar('Bir hata meydana geldi. Daha sonra tekrar deneyin!', { variant: 'error' });
             }
+        }
+    }
+
+    const unFollow = async (id) => {
+        try {
+            let res = await updUnFollowSellerRequest(id);
+
+            if (res) {
+                enqueueSnackbar('Mağazayı takibi bıraktın :(', { variant: 'error' });
+                fetchMyFollows()
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -123,13 +138,13 @@ const Dashboard = () => {
                                     <ListItem
                                         key={val?.id}
                                         secondaryAction={
-                                            <IconButton edge="end" aria-label="delete">
+                                            <IconButton onClick={() => unFollow(val?.id)} edge="end" aria-label="delete">
                                                 <RemoveCircleRounded />
                                             </IconButton>
                                         }
                                     >
                                         <ListItemAvatar>
-                                            <Avatar src={'data:image/jpeg;base64,' + val?.profilePhoto} />
+                                            <Avatar src={`${BASE_URL}/api/seller/${val?.id}/profilePhoto`} />
                                         </ListItemAvatar>
                                         <ListItemText
                                             primary={val?.storeName}

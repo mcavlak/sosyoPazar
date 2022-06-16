@@ -76,7 +76,7 @@ const StoreProduct = ({ sellerId, myProfile, enqueueSnackbar }) => {
                 productList.length > 0 ?
                     <Grid container spacing={2}>
                         {productList.map((val, i) =>
-                            <ProductCard key={i} product={val} myProfile={myProfile} />
+                            <ProductCard key={i} product={val} myProfile={myProfile} fetchProductList={fetchProductList} />
                         )} </Grid> :
                     <Alert severity="warning">
                         <AlertTitle>Henüz ürün eklenmemiş :(</AlertTitle>
