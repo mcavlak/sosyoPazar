@@ -10,6 +10,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByContentOwner_IdIn(List<Long> ownerId);
 
-    List<Post> findByContentOwner_Id(Long sellerId);
+    //List<Post> findByContentOwner_Id(Long sellerId);
+
+    List<Post> findByContentOwner_IdOrderByCreatedDateTimeDesc(Long sellerId);
 
 }

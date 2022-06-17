@@ -14,7 +14,7 @@ const StoreContact = ({ store }) => {
                         WEB SİTESİ
                     </Typography>
                     <Typography variant="body1">
-                        {store?.webSite}
+                        {store?.webSite ? store?.webSite : "Bilinmiyor"}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -22,7 +22,7 @@ const StoreContact = ({ store }) => {
                         TELEFON NUMARASI
                     </Typography>
                     <Typography variant="body1">
-                        {store?.phone}
+                        {store?.phone ? store?.phone : "Bilinmiyor"}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -30,7 +30,7 @@ const StoreContact = ({ store }) => {
                         MAİL ADRESİ
                     </Typography>
                     <Typography variant="body1">
-                        {store?.mail}
+                        {store?.mail ? store?.mail : "Bilinmiyor"}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -38,7 +38,7 @@ const StoreContact = ({ store }) => {
                         ŞEHİR
                     </Typography>
                     <Typography variant="body1">
-                        {store?.province?.provinceName}
+                        {store?.province?.provinceName ? store?.province?.provinceName : "Bilinmiyor"}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} md={12}>
@@ -46,7 +46,7 @@ const StoreContact = ({ store }) => {
                         ADRES
                     </Typography>
                     <Typography variant="body1">
-                        {store?.fullAddress}
+                        {store?.fullAddress ? store?.fullAddress : "Bilinmiyor"}
                     </Typography>
                 </Grid>
             </Grid>

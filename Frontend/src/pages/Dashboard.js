@@ -121,7 +121,7 @@ const Dashboard = () => {
                         onChange={handleChange}
                         sx={{ borderRight: 1, borderColor: 'divider' }}
                     >
-                        <Tab sx={{ alignItems: 'flex-start' }} label={<p style={{ textAlign: 'left' }}>Keşfet</p>} {...a11yProps(0)} />
+                        <Tab sx={{ alignItems: 'flex-start' }} label={<p style={{ textAlign: 'left' }}>PAYLAŞIMLAR</p>} {...a11yProps(0)} />
                         <Tab sx={{ alignItems: 'flex-start' }} label={
                             <p style={{ textAlign: 'left' }}>TAKİP ETTİKLERİM</p>
                         } {...a11yProps(3)} />

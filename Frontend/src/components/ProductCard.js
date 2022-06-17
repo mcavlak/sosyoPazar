@@ -113,7 +113,7 @@ const ProductCard = ({ product, myProfile, fetchProductList }) => {
                                     action={`${BASE_URL}/api/product/${product.id}/savePhoto/`}// upload route
                                     source={() => fetchProductList()} // response image source
                                     sorting={false}
-                                    accept={['jpg', 'jpeg', 'png', 'gif']}
+                                    accept={['jpg', 'jpeg', 'png', 'webp']}
                                 />
                             }
                         </Grid >

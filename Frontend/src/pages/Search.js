@@ -23,10 +23,12 @@ const Search = () => {
 
             if (res) {
                 setProducts(res.data)
-
-                const unique = [...new Map(res.data.map((item, key) => [item.contentOwner[key], item.contentOwner])).values()]
-
-                setStores(unique)
+                let x = res.data.map(v => v.contentOwner)
+                const sellerList = Array.from(new Set(x.map(a => a.id)))
+                    .map(id => {
+                        return x.find(a => a.id === id)
+                    })
+                setStores(sellerList)
             }
         } catch (error) {
             if (error.response.status === 401) {

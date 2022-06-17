@@ -11,6 +11,7 @@ import com.mcavlak.sosyobazaar.repositories.CustomerRepository;
 import com.mcavlak.sosyobazaar.repositories.PostRepository;
 import com.mcavlak.sosyobazaar.services.PostService;
 import com.mcavlak.sosyobazaar.utils.SecurityContextUtil;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,12 +39,12 @@ public class PostManager implements PostService {
 
     @Override
     public List<PostDto> findAll() {
-        return postMapper.entityListToDtoList(postRepository.findAll());
+        return postMapper.entityListToDtoList(postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdDateTime")));
     }
 
     @Override
     public List<PostDto> findAllBySellerId(Long sellerId) {
-        return postMapper.entityListToDtoList(postRepository.findByContentOwner_Id(sellerId));
+        return postMapper.entityListToDtoList(postRepository.findByContentOwner_IdOrderByCreatedDateTimeDesc(sellerId));
     }
 
     @Override
