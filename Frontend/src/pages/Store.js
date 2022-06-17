@@ -127,6 +127,7 @@ const Store = () => {
             if (res) {
                 enqueueSnackbar('Başarıyla yorum yaptın!', { variant: 'success' });
                 closeCommentDialog()
+                fetchStoreScore()
             }
         } catch (error) {
             if (error.response.status === 401) {
