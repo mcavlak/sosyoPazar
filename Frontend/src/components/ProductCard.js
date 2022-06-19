@@ -29,7 +29,7 @@ const ProductCard = ({ product, myProfile, fetchProductList }) => {
                         component="img"
                         image={product.photoIdList && product.photoIdList.length > 0 ? `${BASE_URL}/api/product/${product.id}/photo/${product.photoIdList[0]}` : "/assets/no-image.svg"}
                         alt={product.productName}
-                        height="200"
+                        height="300"
                     />
                     <CardContent>
                         <Tooltip title={product.productName}>
